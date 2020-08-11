@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_facebook_responsive_ui/screens/screens.dart';
+import 'package:flutter_facebook_responsive_ui/widgets/widgets.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class NavScreen extends StatefulWidget {
@@ -33,7 +34,14 @@ class _NavScreenState extends State<NavScreen> {
     return DefaultTabController(
       length: _icons.length,
       child: Scaffold(
-        body: _screens[_selectedIndex],
+        body: TabBarView(
+          children: _screens,
+        ),
+        bottomNavigationBar: CustomTabBar(
+          icons: _icons,
+          selectedIndex: _selectedIndex,
+          onTap: (index) => setState(() => _selectedIndex = index),
+        ),
       ),
     );
   }
