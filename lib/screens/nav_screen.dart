@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_facebook_responsive_ui/data/data.dart';
 import 'package:flutter_facebook_responsive_ui/screens/screens.dart';
 import 'package:flutter_facebook_responsive_ui/widgets/widgets.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -31,17 +32,33 @@ class _NavScreenState extends State<NavScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final Size screenSize = MediaQuery.of(context).size;
+
     return DefaultTabController(
       length: _icons.length,
       child: Scaffold(
-        body: TabBarView(
+        appBar: Responsive.isDesktop(context)
+            ? PreferredSize(
+                preferredSize: Size(screenSize.width, 100),
+                child: CustomAppBar(
+                  currentUser: currentUser,
+                  icons: _icons,
+                  selectedIndex: _selectedIndex,
+                  onTap: (index) => setState(() => _selectedIndex = index),
+                ),
+              )
+            : null,
+        body: IndexedStack(
+          index: _selectedIndex,
           children: _screens,
         ),
-        bottomNavigationBar: CustomTabBar(
-          icons: _icons,
-          selectedIndex: _selectedIndex,
-          onTap: (index) => setState(() => _selectedIndex = index),
-        ),
+        bottomNavigationBar: !Responsive.isDesktop(context)
+            ? CustomTabBar(
+                icons: _icons,
+                selectedIndex: _selectedIndex,
+                onTap: (index) => setState(() => _selectedIndex = index),
+              )
+            : const SizedBox.shrink(),
       ),
     );
   }
